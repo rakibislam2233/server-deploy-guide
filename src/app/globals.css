@@ -1,26 +1,256 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-quicksand);
+  --font-mono: var(--font-ibm-mono);
+  --font-bengali: var(--font-anek-bangla);
+  --font-heading: var(--font-quicksand);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Light (default without .dark on <html>) */
+:root {
+  --background: #fafafa;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  --primary: #262626;
+  --primary-foreground: #fafafa;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #a1a1aa;
+  --chart-1: #52525b;
+  --chart-2: #71717a;
+  --chart-3: #a1a1aa;
+  --chart-4: #d4d4d8;
+  --chart-5: #e4e4e7;
+  --radius: 0.5rem;
+  --sidebar: #f4f4f5;
+  --sidebar-foreground: #18181b;
+  --sidebar-primary: #262626;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #e4e4e7;
+  --sidebar-accent-foreground: #18181b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #a1a1aa;
+}
+
+.dark {
+  --background: #050505;
+  --foreground: #e5e5e5;
+  --card: #0f0f0f;
+  --card-foreground: #e5e5e5;
+  --popover: #111111;
+  --popover-foreground: #e5e5e5;
+  --primary: #d4d4d4;
+  --primary-foreground: #0a0a0a;
+  --secondary: #171717;
+  --secondary-foreground: #d4d4d4;
+  --muted: #141414;
+  --muted-foreground: #a3a3a3;
+  --accent: #1a1a1a;
+  --accent-foreground: #fafafa;
+  --destructive: #525252;
+  --destructive-foreground: #fafafa;
+  --border: #2a2a2a;
+  --input: #262626;
+  --ring: #737373;
+  --chart-1: #a3a3a3;
+  --chart-2: #737373;
+  --chart-3: #525252;
+  --chart-4: #404040;
+  --chart-5: #262626;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #e5e5e5;
+  --sidebar-primary: #d4d4d4;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #171717;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #2a2a2a;
+  --sidebar-ring: #737373;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    overflow-x: clip;
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    overflow-x: clip;
+  }
+  html[lang="bn"] body {
+    font-family: var(--font-anek-bangla), var(--font-quicksand), system-ui,
+      sans-serif;
+  }
+  html[lang="en"] body {
+    font-family: var(--font-quicksand), system-ui, sans-serif;
+  }
+
+  /* Pointer on clickable primitives & controls */
+  button:not(:disabled):not([aria-disabled="true"]),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  [role="menuitem"]:not([aria-disabled="true"]),
+  [role="switch"]:not([aria-disabled="true"]),
+  select:not(:disabled),
+  a[href],
+  summary {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  button[disabled],
+  select:disabled,
+  [aria-disabled="true"]:is(button, [role="button"], [role="tab"]) {
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Scrollbars — thin; theme-aware (track blends with page in light mode) */
+html:not(.dark) * {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--foreground) 22%, transparent)
+    transparent;
+}
+
+html.dark * {
+  scrollbar-width: thin;
+  scrollbar-color: #525252 #141414;
+}
+
+html:not(.dark) *::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+html:not(.dark) *::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 999px;
+}
+
+html:not(.dark) *::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--foreground) 28%, transparent);
+  border-radius: 999px;
+}
+
+html:not(.dark) *::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--foreground) 40%, transparent);
+}
+
+html:not(.dark) *::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+html.dark *::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+html.dark *::-webkit-scrollbar-track {
+  background: #0a0a0a;
+  border-radius: 999px;
+}
+
+html.dark *::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #5c5c5c, #3a3a3a);
+  border-radius: 999px;
+  border: 1px solid #0a0a0a;
+}
+
+html.dark *::-webkit-scrollbar-thumb:hover {
+  background: #737373;
+}
+
+html.dark *::-webkit-scrollbar-corner {
+  background: #0a0a0a;
+}
+
+details > summary {
+  list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+@utility dot-grid {
+  background-color: var(--background);
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--foreground) 12%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+@utility font-bengali {
+  font-family: var(--font-anek-bangla), var(--font-quicksand), system-ui,
+    sans-serif;
 }
