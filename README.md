@@ -1,15 +1,48 @@
 # Server Deploy Guide
 
-Bangla-first, bilingual interactive guide for deploying apps on a VPS (manual PM2/systemd path and Docker path): SSH, security, Nginx, SSL, CI/CD, backups, and more.
+**বাংলা-প্রধান**, ইংরেজি সহ দ্বিভাষিক ওয়েব গাইড — VPS এ অ্যাপ ডেপ্লয় (ম্যানুয়াল PM2/সিস্টেম সার্ভিস **অথবা** ডকার পথ): SSH, সিকিউরিটি, ডাটাবেস, Nginx, SSL, Cloudflare, মনিটরিং, CI/CD, ব্যাকআপ ও আরও অনেক কিছু।
 
-- **Live site:** [https://server-deploy.mdrakib.me](https://server-deploy.mdrakib.me)
-- **Live stack:** [Next.js](https://nextjs.org) (App Router), Tailwind CSS v4, [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) with **Anek Bangla** for Bengali script.
-- **Content:** `src/lib/content/part0.ts` … `part4.ts` — each node has `bn` and `en` strings.
+**English:** A bilingual, interactive deployment guide with **manual** and **Docker** paths, dark/light theme, and language toggle (বাংলা / EN).
+
+---
+
+## Live site & source
+
+| | Link |
+| --- | --- |
+| **Production** | [https://server-deploy.mdrakib.me](https://server-deploy.mdrakib.me) |
+| **Repository** | [github.com/rakibislam2233/server-deploy-guide](https://github.com/rakibislam2233/server-deploy-guide) |
+| **Contributors** | [/contributors](https://server-deploy.mdrakib.me/contributors) (when `NEXT_PUBLIC_GITHUB_REPO` is set) |
+
+---
+
+## Highlights
+
+- **Content-driven guide** — Sections live in `src/lib/content/part0.ts` … `part4.ts`; each block has `bn` and `en` fields.
+- **Two deploy paths** — Switch between manual (host PM2/services) and Docker; the visible sections update with your choice.
+- **Reading progress** — Scroll-based progress and section checklist in the sidebar (large screens).
+- **GitHub integration** — Repo link, optional **star count** in the header (via `/api/github-repo`), and contributors fetched from the GitHub API.
+- **SEO-ready** — `sitemap.xml`, `robots.txt`, canonical URLs, Open Graph + Twitter cards, JSON-LD (`WebSite` / `Organization`), and [`opengraph-image`](./src/app/opengraph-image.tsx).
+
+---
+
+## Tech stack
+
+| Layer | Choice |
+| --- | --- |
+| Framework | [Next.js 15](https://nextjs.org) (App Router, React 19) |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com) (Base UI primitives) |
+| Fonts | [Anek Bangla](https://fonts.google.com/specimen/Anek+Bangla) (Bengali), Quicksand, IBM Plex Mono |
+| Tooling | TypeScript, ESLint, Turbopack (`next dev` / `next build`) |
+
+---
 
 ## Prerequisites
 
-- Node.js 18+
-- npm (or pnpm/yarn)
+- **Node.js** 18 or newer  
+- **npm** (or pnpm / yarn)
+
+---
 
 ## Getting started
 
@@ -20,32 +53,75 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000).  
+For production-like checks:
+
+```bash
+npm run build
+npm run start
+```
+
+---
 
 ## Environment variables
 
-Copy `.env.local.example` to `.env.local` and adjust:
+Copy `.env.local.example` to `.env.local` and set values for your fork / deployment.
 
-| Variable | Purpose |
-| -------- | ------- |
-| `NEXT_PUBLIC_GITHUB_REPO` | **`owner/repo` only** (e.g. `rakibislam2233/server-deploy-guide`). Used for GitHub links and the `/contributors` page. Do **not** paste `https://github.com/...` unless it contains `github.com` — the app normalizes common URLs, but the REST URL is always `https://api.github.com/repos/{owner}/{repo}/contributors`. |
-| `NEXT_PUBLIC_SITE_URL` | Canonical URL for SEO: Open Graph, `sitemap.xml`, `robots.txt`, JSON-LD. Production: `https://server-deploy.mdrakib.me`. |
+| Variable | Required | Description |
+| --- | --- | --- |
+| `NEXT_PUBLIC_GITHUB_REPO` | Recommended | GitHub repo as **`owner/repo`** only (e.g. `rakibislam2233/server-deploy-guide`). Powers repo links, contributors page, star count API, and JSON-LD `sameAs`. Full `https://github.com/...` URLs are normalized when possible. |
+| `NEXT_PUBLIC_SITE_URL` | Recommended | Public site origin **without** trailing slash, e.g. `https://server-deploy.mdrakib.me`. Used for metadata base, canonical URLs, `sitemap.xml`, `robots.txt`, and social previews. |
+| `GITHUB_TOKEN` | Optional | Fine-grained or classic PAT for higher GitHub API rate limits on `/api/github-repo`. **Server-only** — do not use `NEXT_PUBLIC_` prefix. |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Optional | Google Search Console verification string. |
+| `NEXT_PUBLIC_TWITTER_SITE` | Optional | Twitter / X handle for `site` meta (e.g. `@yourhandle`). |
+| `NEXT_PUBLIC_TWITTER_CREATOR` | Optional | Creator handle for Twitter card metadata. |
 
-## Scripts
+---
 
-```bash
-npm run dev      # development server
-npm run build    # production build
-npm run start    # serve production build
-npm run lint     # ESLint
+## npm scripts
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start dev server (Turbopack) |
+| `npm run build` | Production build (Turbopack) |
+| `npm run start` | Run production server (after `build`) |
+| `npm run lint` | Run ESLint |
+
+---
+
+## Project layout (short)
+
 ```
+src/
+  app/                 # Routes, layout, SEO (sitemap, robots, OG image), API routes
+  components/          # UI: guide shell, header, sidebar, contributors view, etc.
+  contexts/            # Theme, language, deploy path (localStorage)
+  hooks/
+  lib/
+    content/           # Guide data: part0.ts … part4.ts
+    i18n/              # UI strings (bn / en)
+    seo.ts             # Site URL helpers & keywords
+  types/               # Guide TypeScript types
+```
+
+---
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md). Summary: fork, edit content files under `src/lib/content/`, run `npx tsc --noEmit`, open a PR.
+We welcome fixes and improvements. Please read **[CONTRIBUTING.md](./CONTRIBUTING.md)** for:
 
-Contributors are listed on `/contributors` when `NEXT_PUBLIC_GITHUB_REPO` is set correctly.
+- Fork / clone / PR flow (বাংলা ও English)
+- Where content files live and how nodes are structured
+- What to run before opening a PR (`npx tsc --noEmit`, `npm run dev`)
+
+---
 
 ## License
 
-See the repository license file (if present).
+If the repository includes a `LICENSE` file, follow that file. Otherwise, default to the terms stated by the repository owner on GitHub.
+
+---
+
+## Author
+
+Maintained by **[Rakib Islam](https://github.com/rakibislam2233)** — questions and suggestions via [Issues](https://github.com/rakibislam2233/server-deploy-guide/issues).
