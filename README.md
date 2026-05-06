@@ -118,7 +118,7 @@ We welcome fixes and improvements. Please read **[CONTRIBUTING.md](./CONTRIBUTIN
 
 ## License
 
-If the repository includes a `LICENSE` file, follow that file. Otherwise, default to the terms stated by the repository owner on GitHub.
+If the repository includes a `LICENSE` file, follow that file. Otherwise, default to the terms stated by the repository owner on GitHub
 
 ---
 
